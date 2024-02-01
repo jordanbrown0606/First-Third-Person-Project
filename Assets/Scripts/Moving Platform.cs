@@ -25,14 +25,15 @@ public class MovingPlatform : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    private void FixedUpdate()
     {
         elapsedTime = Time.deltaTime;
 
         float elapsedPercentage = elapsedTime / timeToWaypoint;
+        elapsedPercentage = Mathf.SmoothStep(0, 1, elapsedPercentage);
         transform.position = Vector3.Lerp(previousWaypoint.position, targetWaypoint.position, elapsedPercentage);
 
-        if (elapsedPercentage >= 1)
+        if (elapsedPercentage >=1)
         {
             targetNextWaypoint();
         }
@@ -52,7 +53,7 @@ public class MovingPlatform : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Player");
+        if (other.gameObject.tag == "Player")
         { 
             other.transform.SetParent(transform);
         }

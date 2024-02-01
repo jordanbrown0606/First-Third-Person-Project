@@ -21,25 +21,25 @@ public class MovingPlatform : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        targetNextWaypoint();
+        TargetNextWaypoint();
     }
 
     // Update is called once per frame
     private void FixedUpdate()
     {
-        elapsedTime = Time.deltaTime;
+        elapsedTime += Time.deltaTime;
 
         float elapsedPercentage = elapsedTime / timeToWaypoint;
         elapsedPercentage = Mathf.SmoothStep(0, 1, elapsedPercentage);
         transform.position = Vector3.Lerp(previousWaypoint.position, targetWaypoint.position, elapsedPercentage);
 
-        if (elapsedPercentage >=1)
+        if (elapsedPercentage >= 1)
         {
-            targetNextWaypoint();
+            TargetNextWaypoint();
         }
     }
 
-    private void targetNextWaypoint()
+    private void TargetNextWaypoint()
     { 
         previousWaypoint = waypointPath.GetWaypoint(targetWaypointIndex);
         targetWaypointIndex = waypointPath.GetNextWaypoint(targetWaypointIndex);
@@ -57,5 +57,10 @@ public class MovingPlatform : MonoBehaviour
         { 
             other.transform.SetParent(transform);
         }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        other.transform.SetParent(null);
     }
 }

@@ -26,6 +26,7 @@ namespace StarterAssets
 		public float JumpHeight = 1.2f;
 		[Tooltip("The character uses its own gravity value. The engine default is -9.81f")]
 		public float Gravity = -15.0f;
+		private bool canjump = false;
 
 		[Space(10)]
 		[Tooltip("Time required to pass before being able to jump again. Set to 0f to instantly jump again")]
@@ -117,7 +118,16 @@ namespace StarterAssets
 			Move();
 		}
 
-		private void LateUpdate()
+        private void OnTriggerEnter(Collider other)
+        {
+            if (other.gameObject.tag == "PowerUp")
+			{
+				canjump = true;
+				Destroy(other.gameObject);
+			}
+        }
+
+        private void LateUpdate()
 		{
 			CameraRotation();
 		}

@@ -834,7 +834,7 @@ GameObject:
   - component: {fileID: 453603528}
   m_Layer: 0
   m_Name: Kill Plane
-  m_TagString: Untagged
+  m_TagString: Death Plane
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

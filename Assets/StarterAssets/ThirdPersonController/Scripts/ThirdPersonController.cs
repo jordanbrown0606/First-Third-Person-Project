@@ -1,6 +1,8 @@
 ﻿ using UnityEngine;
 #if ENABLE_INPUT_SYSTEM 
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
+using TMPro;
 #endif
 
 /* Note: animations are called via the controller for both the character and capsule using animator null checks
@@ -108,6 +110,12 @@ namespace StarterAssets
 
         private const float _threshold = 0.01f;
 
+        [SerializeField]
+        private Vector3 checkPoint;
+
+        public Text Score;
+        private int score;
+
         private bool _hasAnimator;
 
         private bool IsCurrentDeviceMouse
@@ -125,6 +133,8 @@ namespace StarterAssets
 
         private void Awake()
         {
+
+            checkPoint = transform.position;
             // get a reference to our main camera
             if (_mainCamera == null)
             {
@@ -134,6 +144,9 @@ namespace StarterAssets
 
         private void Start()
         {
+            Score.text = score.ToString();
+
+
             _cinemachineTargetYaw = CinemachineCameraTarget.transform.rotation.eulerAngles.y;
             
             _hasAnimator = TryGetComponent(out _animator);
@@ -159,6 +172,8 @@ namespace StarterAssets
             JumpAndGravity();
             GroundedCheck();
             Move();
+
+            Score.text = score.ToString();
         }
 
         private void LateUpdate()
@@ -166,6 +181,24 @@ namespace StarterAssets
             CameraRotation();
         }
 
+        private void OnTriggerEnter(Collider other)
+        {
+            if (other.gameObject.tag == "Death Plane")
+            {
+                this.GetComponent<CharacterController>().enabled = false;
+                transform.position = checkPoint;
+                this.GetComponent<CharacterController>().enabled = true;
+
+                score -= 10;
+            }
+
+            if (other.gameObject.tag == "Checkpoint")
+            {
+                checkPoint = other.transform.position;
+                score += 100;
+                Destroy(other.gameObject);
+            }
+        }
         private void AssignAnimationIDs()
         {
             _animIDSpeed = Animator.StringToHash("Speed");
